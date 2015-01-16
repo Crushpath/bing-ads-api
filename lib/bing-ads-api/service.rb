@@ -99,11 +99,11 @@ module BingAdsApi
 			rescue Savon::SOAPFault => error
 				LOGGER.error "SOAP Error calling #{operation.to_s}: #{error.http.code}"
 				fault_detail = error.to_hash[:fault][:detail]
-				if fault_detail.key?(:api_fault_detail)
-					api_fault_detail = BingAdsApi::ApiFaultDetail.new(fault_detail[:api_fault_detail])
+				if fault_detail.key?(:api_fault_detail) || fault_detail.key?(:editorial_api_fault_detail)
+					api_fault_detail = BingAdsApi::ApiFaultDetail.new(fault_detail[:api_fault_detail] || fault_detail[:editorial_api_fault_detail])
 					raise BingAdsApi::ApiException.new(
 						api_fault_detail, "SOAP Error calling #{operation.to_s}")
-				elsif fault_detail.key?(:ad_api_fault_detail) 
+				elsif fault_detail.key?(:ad_api_fault_detail)
 					ad_api_fault_detail = BingAdsApi::AdApiFaultDetail.new(fault_detail[:ad_api_fault_detail])
 					raise BingAdsApi::ApiException.new(
 						ad_api_fault_detail, "SOAP Error calling #{operation.to_s}")
