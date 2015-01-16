@@ -419,7 +419,7 @@ module BingAdsApi
 			if ads.is_a? Array
 				ads_for_soap = ads.map{ |ad| ad.to_hash(:camelcase) }
 			elsif ads.is_a? BingAdsApi::Ad
-				ads_for_soap = ad.to_hash(:camelcase)
+				ads_for_soap = [ads.to_hash(:camelcase)]
 			else
 				raise "ads must be an array or instance of BingAdsApi::Ad"
 			end
